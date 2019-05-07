@@ -1,0 +1,52 @@
+{
+  "name": "openapi-merger",
+  "version": "0.0.1",
+  "description": "Simple OpenAPI merger only resolving $ref.",
+  "main": "lib/index",
+  "types": "lib/index",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/en-ken/openapi-merger.git"
+  },
+  "keywords": [
+    "OpenAPI",
+    "Swagger",
+    "yaml",
+    "json",
+    "merge"
+  ],
+  "author": "en-ken",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/en-ken/openapi-merger/issues"
+  },
+  "homepage": "https://github.com/en-ken/openapi-merger#readme",
+  "dependencies": {
+    "commander": "^2.20.0",
+    "js-yaml": "^3.13.1"
+  },
+  "devDependencies": {
+    "@types/jest": "^24.0.12",
+    "@types/js-yaml": "^3.12.1",
+    "@types/node": "^11.13.7",
+    "@types/rimraf": "^2.0.2",
+    "@typescript-eslint/eslint-plugin": "^1.7.0",
+    "eslint": "^5.16.0",
+    "eslint-config-prettier": "^4.2.0",
+    "eslint-plugin-jest": "^22.5.1",
+    "eslint-plugin-prettier": "^3.0.1",
+    "jest": "^24.7.1",
+    "prettier": "^1.17.0",
+    "rimraf": "^2.6.3",
+    "ts-jest": "^24.0.2",
+    "tslint-config-prettier": "^1.18.0",
+    "tslint-plugin-prettier": "^2.0.1",
+    "typescript": "^3.4.5"
+  },
+  "jest": {
+    "preset": "ts-jest"
+  }
+}

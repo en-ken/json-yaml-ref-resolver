@@ -1,0 +1,19 @@
+env:
+  node: true
+extends:
+  - eslint:recommended
+  #- plugin:@typescript-eslint/recommended # typescript
+  - plugin:prettier/recommended # activate prettier rules
+  - prettier/@typescript-eslint # deactivate duplicated prettier rules
+  - plugin:jest/recommended # jest rules
+plugins:
+  - '@typescript-eslint'
+parser: '@typescript-eslint/parser'
+parserOptions:
+  sourceType: module
+  project: './tsconfig.json'
+rules:
+  prettier/prettier:
+    - error
+    - trailingComma: none
+      singleQuote: true
