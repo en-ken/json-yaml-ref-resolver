@@ -3,9 +3,11 @@ import yaml from 'js-yaml';
 
 export default class OpenApiDoc {
   doc: any;
+  baseFilePath: string | null;
 
   constructor(doc?: any) {
     this.doc = doc;
+    this.baseFilePath = null;
   }
 
   static load(filePath: string) {
@@ -24,6 +26,7 @@ export default class OpenApiDoc {
         throw new Error('Unknown extension');
     }
 
+    ins.baseFilePath = filePath;
     return ins;
   }
 

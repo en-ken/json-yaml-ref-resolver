@@ -9,15 +9,21 @@ describe('openApiDoc', () => {
     describe('is successful with', () => {
       test('.yml extension', () => {
         const openApi = OpenApi.load(`${loadDir}/test.template.yml`);
+
         expect(openApi.doc.info.title).toBe('Petstore.yml');
+        expect(openApi.baseFilePath).toBe(`${loadDir}/test.template.yml`);
       });
       test('.yaml extension', () => {
         const openApi = OpenApi.load(`${loadDir}/test.template.yaml`);
+
         expect(openApi.doc.info.title).toBe('Petstore.yaml');
+        expect(openApi.baseFilePath).toBe(`${loadDir}/test.template.yaml`);
       });
       test('.json extension', () => {
         const openApi = OpenApi.load(`${loadDir}/test.template.json`);
+
         expect(openApi.doc.info.title).toBe('Petstore.json');
+        expect(openApi.baseFilePath).toBe(`${loadDir}/test.template.json`);
       });
     });
     describe('failed with', () => {
