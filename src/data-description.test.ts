@@ -138,11 +138,13 @@ describe('DataDescription', () => {
       });
     });
   });
-  describe('getReference', () => {
-    const pets = DataDescription.load(`${loadDir}/refs/pets.yml`);
+  describe('setObject', () => {
+    const petstoreTemplate = DataDescription.load(
+      `${loadDir}/petstore.template.yml`
+    );
     describe('is successful with', () => {
       test('local reference', () => {
-        expect(pets.getReference('#/components/schemas/NewPet')).toEqual({
+        const obj = {
           required: ['name'],
           properties: {
             name: {
@@ -152,19 +154,32 @@ describe('DataDescription', () => {
               type: 'string'
             }
           }
-        });
+        };
+
+        petstoreTemplate.setObject('/components/schemas/NewPet', obj);
+        const expected =
+          petstoreTemplate.doc['components']['schemas']['NewPet'];
+        expect(obj).toEqual(expected);
       });
       test('local reference with ~1', () => {
-        expect(pets.getReference('#/paths/~1pets')).toEqual(
-          pets.doc['paths']['/pets']
-        );
-      });
-    });
-    describe('failed with', () => {
-      test('remote reference', () => {
-        expect(() => pets.getReference('./common-schemas.yml#/Error')).toThrow(
-          'Handle only local reference'
-        );
+        const obj = {
+          get: {
+            response: {
+              200: {
+                content: {
+                  'application/json': {
+                    schema: {
+                      $ref: '#/components/schemas/Pet'
+                    }
+                  }
+                }
+              }
+            }
+          }
+        };
+        petstoreTemplate.setObject('/paths/~1pets~1{id}', obj);
+
+        expect(obj).toEqual(petstoreTemplate.doc['paths']['/pets/{id}']);
       });
     });
   });

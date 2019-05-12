@@ -51,30 +51,23 @@ export default class DataDescription {
     fs.writeFileSync(filePath, docStr, 'utf-8');
   }
 
-  getReference(ref: string): {} {
-    // './remote-ref.yml#/local/ref'
-    const [remoteRef, localRef] = ref.split('#');
+  setObject(localPath: string, obj: {}) {
+    const pathKeys = parseLocalPath(localPath);
+    const lastKey = pathKeys.pop()!;
 
-    // return the parsed oject if only local reference
-    if (remoteRef) {
-      throw new Error('Handle only local reference');
-    }
-
-    return this.getLocalObject(localRef);
-  }
-
-  private getLocalObject(ref: string) {
-    const pathKeys = parseLocalRef(ref);
-
-    let obj = this.doc;
+    let tmp = this.doc;
     pathKeys.forEach(x => {
-      obj = obj[x];
+      if (!tmp[x]) {
+        tmp[x] = {};
+      }
+      tmp = tmp[x];
     });
-    return obj;
+
+    tmp[lastKey] = obj;
   }
 }
 
-const parseLocalRef = (ref: string) =>
+const parseLocalPath = (ref: string) =>
   ref
     .split('/')
     .filter(x => x !== '')
