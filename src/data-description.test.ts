@@ -140,9 +140,6 @@ describe('DataDescription', () => {
   });
   describe('getReference', () => {
     const pets = DataDescription.load(`${loadDir}/refs/pets.yml`);
-    const petstoreTemplate = DataDescription.load(
-      `${loadDir}/petstore.template.yml`
-    );
     describe('is successful with', () => {
       test('local reference', () => {
         expect(pets.getReference('#/components/schemas/NewPet')).toEqual({
@@ -157,24 +154,17 @@ describe('DataDescription', () => {
           }
         });
       });
-      test('remote reference', () => {
-        expect(pets.getReference('./common-schemas.yml#/Error')).toEqual({
-          required: ['code', 'message'],
-          properties: {
-            code: {
-              type: 'integer',
-              format: 'int32'
-            },
-            message: {
-              type: 'string'
-            }
-          }
-        });
+      test('local reference with ~1', () => {
+        expect(pets.getReference('#/paths/~1pets')).toEqual(
+          pets.doc['paths']['/pets']
+        );
       });
-      test('remote reference with ~1', () => {
-        expect(
-          petstoreTemplate.getReference('./refs/pets.yml#/paths/~1pets')
-        ).toEqual(pets.doc['paths']['/pets']);
+    });
+    describe('failed with', () => {
+      test('remote reference', () => {
+        expect(() => pets.getReference('./common-schemas.yml#/Error')).toThrow(
+          'Handle only local reference'
+        );
       });
     });
   });

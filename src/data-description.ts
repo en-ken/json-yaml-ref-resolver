@@ -56,15 +56,11 @@ export default class DataDescription {
     const [remoteRef, localRef] = ref.split('#');
 
     // return the parsed oject if only local reference
-    if (!remoteRef) {
-      return this.getLocalObject(localRef);
+    if (remoteRef) {
+      throw new Error('Handle only local reference');
     }
 
-    // load another document
-    const filePath = path.resolve(path.dirname(this.baseFilePath), remoteRef);
-    const dsc = DataDescription.load(filePath);
-    // return the parsed object of the loaded document.
-    return dsc.getReference('#' + localRef);
+    return this.getLocalObject(localRef);
   }
 
   private getLocalObject(ref: string) {
