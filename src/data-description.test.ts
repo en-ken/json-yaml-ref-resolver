@@ -156,7 +156,7 @@ describe('DataDescription', () => {
           }
         };
 
-        petstoreTemplate.setObject('/components/schemas/NewPet', obj);
+        petstoreTemplate.setObject('#/components/schemas/NewPet', obj);
         const expected =
           petstoreTemplate.doc['components']['schemas']['NewPet'];
         expect(obj).toEqual(expected);
@@ -177,9 +177,38 @@ describe('DataDescription', () => {
             }
           }
         };
-        petstoreTemplate.setObject('/paths/~1pets~1{id}', obj);
+        petstoreTemplate.setObject('#/paths/~1pets~1{id}', obj);
 
         expect(obj).toEqual(petstoreTemplate.doc['paths']['/pets/{id}']);
+      });
+    });
+    describe('failed with', () => {
+      test('remote reference', () => {
+        expect(() =>
+          petstoreTemplate.setObject('foo.yml#/components/schemas/NewPet', {})
+        ).toThrow('Remote reference unavailable');
+      });
+    });
+  });
+  describe('getObject', () => {
+    const pets = DataDescription.load(`${loadDir}/refs/pets.yml`);
+    describe('is successful with', () => {
+      test('local reference', () => {
+        expect(pets.getObject('#/components/schemas/NewPet')).toEqual(
+          pets.doc['components']['schemas']['NewPet']
+        );
+      });
+      test('local reference with ~1', () => {
+        expect(pets.getObject('#/paths/~1pets')).toEqual(
+          pets.doc['paths']['/pets']
+        );
+      });
+    });
+    describe('failed with', () => {
+      test('remote reference', () => {
+        expect(() => pets.getObject('./common-schemas.yml#/Error')).toThrow(
+          'Remote reference unavailable'
+        );
       });
     });
   });

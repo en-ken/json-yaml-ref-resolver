@@ -1,6 +1,5 @@
 import fs from 'fs';
 import yaml from 'js-yaml';
-import path from 'path';
 
 export default class DataDescription {
   doc: any;
@@ -51,8 +50,13 @@ export default class DataDescription {
     fs.writeFileSync(filePath, docStr, 'utf-8');
   }
 
-  setObject(localPath: string, obj: {}) {
-    const pathKeys = parseLocalPath(localPath);
+  setObject(ref: string, obj: {}) {
+    const [remoteRef, localRef] = ref.split('#');
+    if (remoteRef) {
+      throw new Error('Remote reference unavailable');
+    }
+
+    const pathKeys = parseLocalPath(localRef);
     const lastKey = pathKeys.pop()!;
 
     let tmp = this.doc;
@@ -64,6 +68,25 @@ export default class DataDescription {
     });
 
     tmp[lastKey] = obj;
+  }
+
+  getObject(ref: string) {
+    const [remoteRef, localRef] = ref.split('#');
+    if (remoteRef) {
+      throw new Error('Remote reference unavailable');
+    }
+
+    const pathKeys = parseLocalPath(localRef);
+
+    let tmp = this.doc;
+    pathKeys.forEach(x => {
+      if (!tmp[x]) {
+        tmp[x] = {};
+      }
+      tmp = tmp[x];
+    });
+
+    return tmp;
   }
 }
 
