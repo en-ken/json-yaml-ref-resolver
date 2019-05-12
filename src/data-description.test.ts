@@ -1,34 +1,40 @@
-import OpenApi from './openApiDoc';
+import DataDescription from './data-description';
 import fs from 'fs';
 import rimraf from 'rimraf';
 
-describe('openApiDoc', () => {
+describe('DataDescription', () => {
   const loadDir = 'test-data';
   const saveDir = '.tmp';
   describe('load', () => {
     describe('is successful with', () => {
       test('.yml extension', () => {
-        const openApi = OpenApi.load(`${loadDir}/test.template.yml`);
+        const openApi = DataDescription.load(
+          `${loadDir}/petstore.template.yml`
+        );
 
-        expect(openApi.doc.info.title).toBe('Petstore.yml');
-        expect(openApi.baseFilePath).toBe(`${loadDir}/test.template.yml`);
+        expect(openApi.doc.info.title).toBe('Swagger Petstore');
+        expect(openApi.baseFilePath).toBe(`${loadDir}/petstore.template.yml`);
       });
       test('.yaml extension', () => {
-        const openApi = OpenApi.load(`${loadDir}/test.template.yaml`);
+        const openApi = DataDescription.load(
+          `${loadDir}/petstore.template.yaml`
+        );
 
-        expect(openApi.doc.info.title).toBe('Petstore.yaml');
-        expect(openApi.baseFilePath).toBe(`${loadDir}/test.template.yaml`);
+        expect(openApi.doc.info.title).toBe('Swagger Petstore');
+        expect(openApi.baseFilePath).toBe(`${loadDir}/petstore.template.yaml`);
       });
       test('.json extension', () => {
-        const openApi = OpenApi.load(`${loadDir}/test.template.json`);
+        const openApi = DataDescription.load(
+          `${loadDir}/petstore.template.json`
+        );
 
-        expect(openApi.doc.info.title).toBe('Petstore.json');
-        expect(openApi.baseFilePath).toBe(`${loadDir}/test.template.json`);
+        expect(openApi.doc.info.title).toBe('Swagger Petstore');
+        expect(openApi.baseFilePath).toBe(`${loadDir}/petstore.template.json`);
       });
     });
     describe('failed with', () => {
       test('an unknown extension', () => {
-        expect(() => OpenApi.load(`test.template.foo`)).toThrow(
+        expect(() => DataDescription.load(`test.template.foo`)).toThrow(
           'Unknown extension'
         );
       });
@@ -47,7 +53,7 @@ describe('openApiDoc', () => {
     });
     describe('is successful with', () => {
       test('.yml extension', () => {
-        const openApi = new OpenApi({
+        const openApi = new DataDescription({
           id: '001',
           context: {
             key: 'value'
@@ -59,7 +65,7 @@ describe('openApiDoc', () => {
         expect(data).toBe("id: '001'\ncontext:\n  key: value\n");
       });
       test('.yaml extension', () => {
-        const openApi = new OpenApi({
+        const openApi = new DataDescription({
           id: '002',
           context: {
             key: 'value'
@@ -71,7 +77,7 @@ describe('openApiDoc', () => {
         expect(data).toBe("id: '002'\ncontext:\n  key: value\n");
       });
       test('.json extension', () => {
-        const openApi = new OpenApi({
+        const openApi = new DataDescription({
           id: '003',
           context: {
             key: 'value'
@@ -85,7 +91,7 @@ describe('openApiDoc', () => {
         );
       });
       test('.yaml extension, indent size = 4', () => {
-        const openApi = new OpenApi({
+        const openApi = new DataDescription({
           id: '004',
           context: {
             key: 'value'
@@ -97,7 +103,7 @@ describe('openApiDoc', () => {
         expect(data).toBe("id: '004'\ncontext:\n    key: value\n");
       });
       test('.json extension, indent size = 4', () => {
-        const openApi = new OpenApi({
+        const openApi = new DataDescription({
           id: '005',
           context: {
             key: 'value'
@@ -113,14 +119,14 @@ describe('openApiDoc', () => {
     });
     describe('failed with', () => {
       test('an empty document', () => {
-        const openApi = new OpenApi();
+        const openApi = new DataDescription();
 
         expect(() => openApi.saveAs(`${saveDir}/saved.json`)).toThrow(
           'No document to save'
         );
       });
       test('an unknown extension', () => {
-        const openApi = new OpenApi({
+        const openApi = new DataDescription({
           id: '006',
           context: {
             key: 'value'

@@ -1,19 +1,19 @@
 import fs from 'fs';
 import yaml from 'js-yaml';
+import path from 'path';
 
-export default class OpenApiDoc {
+export default class DataDescription {
   doc: any;
-  baseFilePath: string | null;
+  baseFilePath: string = '/';
 
   constructor(doc?: any) {
     this.doc = doc;
-    this.baseFilePath = null;
   }
 
   static load(filePath: string) {
     const ext = filePath.split('.').pop();
 
-    const ins = new OpenApiDoc();
+    const ins = new DataDescription();
     switch (ext) {
       case 'yaml':
       case 'yml':
@@ -50,4 +50,34 @@ export default class OpenApiDoc {
     }
     fs.writeFileSync(filePath, docStr, 'utf-8');
   }
+
+  getReference(ref: string): {} {
+    // './remote-ref.yml#/local/ref'
+    const [remoteRef, localRef] = ref.split('#');
+
+    // return the parsed oject if only local reference
+    if (!remoteRef) return this.getLocalObject(ref);
+
+    // load another document
+    const filePath = path.resolve(path.dirname(this.baseFilePath), remoteRef);
+    const dsc = DataDescription.load(filePath);
+    // return the parsed object of the loaded document.
+    return dsc.getReference('#' + localRef);
+  }
+
+  private getLocalObject(ref: string) {
+    const pathKeys = parseLocalRef(ref);
+
+    let obj = this.doc;
+    pathKeys.forEach(x => {
+      obj = obj[x];
+    });
+    return obj;
+  }
 }
+
+const parseLocalRef = (ref: string) =>
+  ref
+    .split('/')
+    .filter(x => x !== '')
+    .map(x => x.replace(/~1/g, '/').replace(/~0/g, '~'));
