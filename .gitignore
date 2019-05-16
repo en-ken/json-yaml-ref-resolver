@@ -62,3 +62,6 @@ typings/
 
 # output test data to this directory
 .tmp
+
+# coverage
+coverage
