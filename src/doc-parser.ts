@@ -12,7 +12,13 @@ const parseRecursively = (
   targetRef: string = '#'
 ) => {
   const part = description.getObject(targetRef);
-  if (typeof part === 'object') {
+  if (Array.isArray(part)) {
+    part.forEach((item, i) => {
+      if (typeof item === 'object') {
+        part[i] = parseObject(description, item, targetRef, `${i}`);
+      }
+    });
+  } else if (typeof part === 'object') {
     Object.keys(part).forEach(key => {
       const child = part[key];
       if (typeof child === 'object') {
