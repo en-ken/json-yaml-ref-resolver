@@ -143,7 +143,7 @@ describe('DataDescription', () => {
       `${loadDir}/petstore.template.yml`
     );
     describe('is successful with', () => {
-      test('local reference', () => {
+      test('a local reference', () => {
         const obj = {
           required: ['name'],
           properties: {
@@ -161,7 +161,7 @@ describe('DataDescription', () => {
           petstoreTemplate.doc['components']['schemas']['NewPet'];
         expect(obj).toEqual(expected);
       });
-      test('local reference with ~1', () => {
+      test('a local reference with ~1', () => {
         const obj = {
           get: {
             response: {
@@ -181,7 +181,7 @@ describe('DataDescription', () => {
 
         expect(obj).toEqual(petstoreTemplate.doc['paths']['/pets/{id}']);
       });
-      test('local reference to an array item', () => {
+      test('a local reference to an item in array', () => {
         const path = 'https://petstore.swagger.io/v1';
         petstoreTemplate.setObject('#/servers/1', path);
         expect(path).toEqual(petstoreTemplate.doc['servers'][1]);
@@ -198,24 +198,24 @@ describe('DataDescription', () => {
   describe('getObject', () => {
     const pets = DataDescription.load(`${loadDir}/refs/pets.yml`);
     describe('is successful with', () => {
-      test('local reference', () => {
+      test('a local reference', () => {
         expect(pets.getObject('#/components/schemas/NewPet')).toEqual(
           pets.doc['components']['schemas']['NewPet']
         );
       });
-      test('local reference with ~1', () => {
+      test('a local reference with ~1', () => {
         expect(pets.getObject('#/paths/~1pets')).toEqual(
           pets.doc['paths']['/pets']
         );
       });
-      test('local reference to an array item', () => {
+      test('a local reference to an item in array', () => {
         expect(pets.getObject('#/components/schemas/Pet/required/1')).toEqual(
           pets.doc['components']['schemas']['Pet']['required'][1]
         );
       });
     });
     describe('failed with', () => {
-      test('remote reference', () => {
+      test('a remote reference', () => {
         expect(() => pets.getObject('./common-schemas.yml#/Error')).toThrow(
           'Remote reference unavailable'
         );
