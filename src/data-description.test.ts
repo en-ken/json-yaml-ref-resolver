@@ -181,6 +181,11 @@ describe('DataDescription', () => {
 
         expect(obj).toEqual(petstoreTemplate.doc['paths']['/pets/{id}']);
       });
+      test('local reference to an array item', () => {
+        const path = 'https://petstore.swagger.io/v1';
+        petstoreTemplate.setObject('#/servers/1', path);
+        expect(path).toEqual(petstoreTemplate.doc['servers'][1]);
+      });
     });
     describe('failed with', () => {
       test('remote reference', () => {
@@ -201,6 +206,11 @@ describe('DataDescription', () => {
       test('local reference with ~1', () => {
         expect(pets.getObject('#/paths/~1pets')).toEqual(
           pets.doc['paths']['/pets']
+        );
+      });
+      test('local reference to an array item', () => {
+        expect(pets.getObject('#/components/schemas/Pet/required/1')).toEqual(
+          pets.doc['components']['schemas']['Pet']['required'][1]
         );
       });
     });
