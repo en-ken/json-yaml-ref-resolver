@@ -60,8 +60,11 @@ typings/
 # next.js build output
 .next
 
+# output dir
+lib/
+
 # output test data to this directory
-.tmp
+.tmp/
 
 # coverage
-coverage
+coverage/
