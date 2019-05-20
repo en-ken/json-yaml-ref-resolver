@@ -1,11 +1,16 @@
 {
-  "name": "openapi-merger",
+  "name": "json-yaml-ref-resolver",
   "version": "0.0.1",
-  "description": "Simple OpenAPI merger only resolving $ref.",
+  "description": "Simple '$ref' key resolver on json and yaml files.",
   "main": "lib/index",
   "types": "lib/index",
+  "files": [
+    "lib/"
+  ],
   "scripts": {
-    "test": "jest --coverage"
+    "test": "jest --coverage",
+    "build": "rimraf ./lib; tsc",
+    "prepublishOnly": "npm run build"
   },
   "repository": {
     "type": "git",
@@ -16,7 +21,7 @@
     "Swagger",
     "yaml",
     "json",
-    "merge"
+    "$ref"
   ],
   "author": "en-ken",
   "license": "MIT",
@@ -42,6 +47,7 @@
     "prettier": "^1.17.0",
     "rimraf": "^2.6.3",
     "ts-jest": "^24.0.2",
+    "ts-node": "^8.1.0",
     "tslint-config-prettier": "^1.18.0",
     "tslint-plugin-prettier": "^2.0.1",
     "typescript": "^3.4.5"
