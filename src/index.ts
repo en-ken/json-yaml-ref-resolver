@@ -2,13 +2,11 @@ import program from 'commander';
 import parseDoc from './doc-parser';
 import dataDescription from './data-description';
 import { PathNotFoundError, ExtensionError } from './errors';
-import packageInfo from '../package.json';
 
 let inputPath = '';
 let outputPath = '';
 
 program
-  .version(packageInfo.version)
   .arguments('<targetFilePath> <outputFilePath>')
   .action((targetFilePath: string, outputFilePath: string) => {
     inputPath = targetFilePath;
@@ -23,6 +21,7 @@ if (!inputPath || !outputPath) {
 }
 
 let doc;
+// read the target file and parse $ref
 try {
   doc = parseDoc(inputPath);
 } catch (err) {
@@ -36,6 +35,7 @@ try {
   process.exit(-1);
 }
 
+// save
 try {
   if (program.indent) {
     new dataDescription(doc).saveAs(outputPath, program.indent);
