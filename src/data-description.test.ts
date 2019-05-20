@@ -1,6 +1,7 @@
 import DataDescription from './data-description';
 import fs from 'fs';
 import rimraf from 'rimraf';
+import { UsageError, ExtensionError, PathNotFoundError } from './errors';
 
 describe('DataDescription', () => {
   const loadDir = 'test-data';
@@ -34,8 +35,13 @@ describe('DataDescription', () => {
     });
     describe('failed with', () => {
       test('an unknown extension', () => {
-        expect(() => DataDescription.load(`test.template.foo`)).toThrow(
-          'Unknown extension'
+        expect(() => DataDescription.load(`load.foo`)).toThrow(
+          new ExtensionError('Unknown extension')
+        );
+      });
+      test('a file which does not exist', () => {
+        expect(() => DataDescription.load(`load.yml`)).toThrow(
+          new PathNotFoundError('File not found')
         );
       });
     });
@@ -122,18 +128,19 @@ describe('DataDescription', () => {
         const openApi = new DataDescription();
 
         expect(() => openApi.saveAs(`${saveDir}/saved.json`)).toThrow(
-          'No document to save'
+          new UsageError('No document to save')
         );
       });
       test('an unknown extension', () => {
-        const openApi = new DataDescription({
-          id: '006',
-          context: {
-            key: 'value'
-          }
-        });
+        const openApi = new DataDescription({});
         expect(() => openApi.saveAs(`${saveDir}/saved.bar`)).toThrow(
-          'Unknown extension'
+          new ExtensionError('Unknown extension')
+        );
+      });
+      test('a directory which does not exist', () => {
+        const openApi = new DataDescription({});
+        expect(() => openApi.saveAs(`foo/saved.yml`)).toThrow(
+          new PathNotFoundError('Directory not found')
         );
       });
     });
@@ -191,7 +198,7 @@ describe('DataDescription', () => {
       test('remote reference', () => {
         expect(() =>
           petstoreTemplate.setObject('foo.yml#/components/schemas/NewPet', {})
-        ).toThrow('Remote reference unavailable');
+        ).toThrow(new UsageError('Remote reference unavailable'));
       });
     });
   });
@@ -217,7 +224,7 @@ describe('DataDescription', () => {
     describe('failed with', () => {
       test('a remote reference', () => {
         expect(() => pets.getObject('./common-schemas.yml#/Error')).toThrow(
-          'Remote reference unavailable'
+          new UsageError('Remote reference unavailable')
         );
       });
     });

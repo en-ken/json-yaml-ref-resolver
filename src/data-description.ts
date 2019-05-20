@@ -1,5 +1,6 @@
 import fs from 'fs';
 import yaml from 'js-yaml';
+import { ExtensionError, UsageError, PathNotFoundError } from './errors';
 
 export default class DataDescription {
   doc: any;
@@ -13,25 +14,31 @@ export default class DataDescription {
     const ext = filePath.split('.').pop();
 
     const ins = new DataDescription();
+    let func;
     switch (ext) {
       case 'yaml':
       case 'yml':
-        ins.doc = yaml.safeLoad(fs.readFileSync(filePath, 'utf-8'));
+        func = yaml.safeLoad;
         break;
       case 'json':
-        ins.doc = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+        func = JSON.parse;
         break;
       default:
-        throw new Error('Unknown extension');
+        throw new ExtensionError('Unknown extension');
     }
 
+    try {
+      ins.doc = func(fs.readFileSync(filePath, 'utf-8'));
+    } catch (e) {
+      throw new PathNotFoundError('File not found');
+    }
     ins.baseFilePath = filePath;
     return ins;
   }
 
   saveAs(filePath: string, indent = 2) {
     if (this.doc == null) {
-      throw new Error('No document to save');
+      throw new UsageError('No document to save');
     }
     const ext = filePath.split('.').pop();
 
@@ -45,15 +52,20 @@ export default class DataDescription {
         docStr = JSON.stringify(this.doc, null, ' '.repeat(indent));
         break;
       default:
-        throw new Error('Unknown extension');
+        throw new ExtensionError('Unknown extension');
     }
-    fs.writeFileSync(filePath, docStr, 'utf-8');
+
+    try {
+      fs.writeFileSync(filePath, docStr, 'utf-8');
+    } catch (e) {
+      throw new PathNotFoundError('Directory not found');
+    }
   }
 
   setObject(ref: string, obj: {}) {
     const [remoteRef, localRef] = ref.split('#');
     if (remoteRef) {
-      throw new Error('Remote reference unavailable');
+      throw new UsageError('Remote reference unavailable');
     }
 
     const pathKeys = parseLocalPath(localRef);
@@ -73,7 +85,7 @@ export default class DataDescription {
   getObject(ref: string) {
     const [remoteRef, localRef] = ref.split('#');
     if (remoteRef) {
-      throw new Error('Remote reference unavailable');
+      throw new UsageError('Remote reference unavailable');
     }
 
     const pathKeys = parseLocalPath(localRef);
