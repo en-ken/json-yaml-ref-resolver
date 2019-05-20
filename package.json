@@ -2,10 +2,10 @@
   "name": "json-yaml-ref-resolver",
   "version": "0.0.1",
   "description": "Simple '$ref' key resolver on json and yaml files.",
-  "main": "lib/index",
-  "types": "lib/index",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "files": [
-    "lib/"
+    "lib"
   ],
   "scripts": {
     "test": "jest --coverage",
