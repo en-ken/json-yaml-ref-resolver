@@ -1,15 +1,72 @@
 version: 2.1
-jobs:
-  build:
+
+executors:
+  default:
     docker:
       - image: circleci/node:10.15
+
+commands:
+  restore_modules:
     steps:
-      - checkout
       - restore_cache:
-          key: dep-{{ checksum "package.json" }}
-      - run: npm install
+          keys:
+            - v1-npm-deps-{{ checksum "package-lock.json" }}
+            - v1-npm-deps-
+  save_modules:
+    steps:
       - save_cache:
-          key: dep-{{ checksum "package.json" }}
+          key: v1-npm-deps-{{ checksum "package-lock.json" }}
           paths:
             - node_modules
-      - run: npm test
+
+jobs:
+  setup:
+    executor: default
+    steps:
+      - checkout
+      - restore_modules
+      - run: npm install
+      - save_modules
+  test:
+    executor: default
+    steps:
+      - checkout
+      - restore_modules
+      - run:
+          name: Linter check
+          command: npx eslint src/*
+      - run:
+          name: Test
+          command: npm test
+  publish:
+    executor: default
+    steps:
+      - checkout
+      - restore_modules
+      - run:
+          name: github setting
+          command: |
+            git config push.default current
+            git config --global user.name  "EnKen"
+            git config --global user.email "${github_email}"
+      - run:
+          name: tag and publish to npm
+          command: |
+            npm version patch
+            git push --tags origin master
+            echo "//registry.npmjs.org/:_authToken=${npm_token}" > ~/project/.npmrc
+            npm publish
+
+workflows:
+  main:
+    jobs:
+      - setup
+      - test:
+          requires:
+            - setup
+      - publish:
+          requires:
+            - test
+          #filters:
+          #  branches:
+          #    only: master
