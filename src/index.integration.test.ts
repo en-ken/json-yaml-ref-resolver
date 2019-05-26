@@ -1,10 +1,10 @@
 import { spawnSync } from 'child_process';
-import path from 'path';
 import fs from 'fs';
+import path from 'path';
 import rimraf from 'rimraf';
 
 function cli(args: any[] = []) {
-  return spawnSync('npx', ['ts-node', path.resolve('./'), ...args], {
+  return spawnSync('npx', ['ts-node', path.resolve('src'), ...args], {
     cwd: process.cwd(),
     env: process.env,
     stdio: 'pipe',
@@ -49,6 +49,7 @@ describe('CLI displays', () => {
       `${saveDir}/result.yml`
     ]);
     expect(result.stdout).toMatch(/Done./);
+    expect(result.stderr).toMatch('');
   });
   test('the error message when <targetFilePath> does not exist', () => {
     const result = cli(['foo.yml', 'bar.yml']);

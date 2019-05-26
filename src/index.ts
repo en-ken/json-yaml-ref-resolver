@@ -7,6 +7,7 @@ let inputPath = '';
 let outputPath = '';
 
 program
+  .name('json-yaml-ref-resolver')
   .arguments('<targetFilePath> <outputFilePath>')
   .action((targetFilePath: string, outputFilePath: string) => {
     inputPath = targetFilePath;
