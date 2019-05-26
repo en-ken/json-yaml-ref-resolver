@@ -1,7 +1,6 @@
 import { spawnSync } from 'child_process';
 import fs from 'fs';
 import path from 'path';
-import rimraf from 'rimraf';
 
 function cli(args: any[] = []) {
   return spawnSync('npx', ['ts-node', path.resolve('src'), ...args], {
@@ -12,26 +11,39 @@ function cli(args: any[] = []) {
   });
 }
 
+async function sleep(msec: number) {
+  return new Promise(resolve => setTimeout(resolve, msec));
+}
+
+function pathExists(path: string) {
+  try {
+    fs.statSync(path);
+    return true;
+  } catch (_) {
+    return false;
+  }
+}
+
 describe('App test:', () => {
   const saveDir = '.tmp';
-  beforeEach(() => {
-    try {
-      fs.statSync(saveDir);
-    } catch (_) {
-      fs.mkdirSync(saveDir);
+  beforeAll(() => {
+    if (!pathExists(saveDir)) {
+      try {
+        fs.mkdirSync(saveDir);
+      } catch (e) {
+        console.log(e);
+      }
     }
   });
-  afterEach(() => {
-    rimraf(saveDir, () => {});
-  });
-  test('outputs the expected file', () => {
+  test('outputs the expected file', async () => {
     const inputPath = 'test-data/petstore.template.yml';
     const outputPath = `${saveDir}/result.yml`;
     const expectedPath = 'test-data/petstore.expanded.yml';
+
     cli([inputPath, outputPath]);
 
-    while (!fs.existsSync(outputPath)) {
-      setTimeout(() => {}, 100);
+    while (!pathExists(outputPath)) {
+      await sleep(100);
     }
 
     const expected = fs.readFileSync(expectedPath, 'utf-8');

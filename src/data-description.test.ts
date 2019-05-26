@@ -54,9 +54,6 @@ describe('DataDescription', () => {
         fs.mkdirSync(saveDir);
       }
     });
-    afterAll(() => {
-      rimraf(saveDir, () => {});
-    });
     describe('is successful with', () => {
       test('.yml extension', () => {
         const openApi = new DataDescription({
