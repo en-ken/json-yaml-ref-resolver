@@ -1,15 +1,88 @@
 version: 2.1
-jobs:
-  build:
+
+executors:
+  default:
     docker:
       - image: circleci/node:10.15
+
+commands:
+  restore_modules:
     steps:
-      - checkout
       - restore_cache:
-          key: dep-{{ checksum "package.json" }}
-      - run: npm install
+          keys:
+            - v1-npm-deps-{{ checksum "package-lock.json" }}
+            - v1-npm-deps-
+  save_modules:
+    steps:
       - save_cache:
-          key: dep-{{ checksum "package.json" }}
+          key: v1-npm-deps-{{ checksum "package-lock.json" }}
           paths:
             - node_modules
-      - run: npm test
+
+jobs:
+  setup:
+    executor: default
+    steps:
+      - checkout
+      - restore_modules
+      - run: npm install
+      - save_modules
+  test:
+    executor: default
+    steps:
+      - checkout
+      - restore_modules
+      - run:
+          name: Linter check
+          command: npx eslint src/*
+      - run:
+          name: Test
+          command: npm test
+  push_tag:
+    executor: default
+    steps:
+      - checkout
+      - restore_modules
+      - run:
+          name: Push a new tag
+          command: |
+            git config push.default current
+            git config --global user.name  "EnKen"
+            git config --global user.email "${github_email}"
+            npm version patch
+            git push --tags origin master
+  publish:
+    executor: default
+    steps:
+      - checkout
+      - restore_modules
+      - run:
+          name: Publish to npm
+          command: |
+            echo "//registry.npmjs.org/:_authToken=${npm_token}" > ~/project/.npmrc
+            npm publish
+
+workflows:
+  main:
+    jobs:
+      - setup
+      - test:
+          requires:
+            - setup
+      - push_tag:
+          requires:
+            - test
+          filters:
+            branches:
+              only: master
+  publish:
+    jobs:
+      - setup
+      - publish:
+          requires:
+            - setup
+          filters:
+            tags:
+              only: /^[0-9.]+\.0$/
+            branches:
+              ignore: /.*/

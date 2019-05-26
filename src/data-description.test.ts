@@ -1,6 +1,5 @@
 import DataDescription from './data-description';
 import fs from 'fs';
-import rimraf from 'rimraf';
 import { UsageError, ExtensionError, PathNotFoundError } from './errors';
 
 describe('DataDescription', () => {
