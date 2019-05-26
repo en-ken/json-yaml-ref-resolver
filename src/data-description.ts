@@ -46,7 +46,7 @@ export default class DataDescription {
     switch (ext) {
       case 'yaml':
       case 'yml':
-        docStr = yaml.safeDump(this.doc, { indent });
+        docStr = yaml.safeDump(this.doc, { indent, noRefs: true });
         break;
       case 'json':
         docStr = JSON.stringify(this.doc, null, ' '.repeat(indent));
