@@ -1,4 +1,5 @@
 import program from 'commander';
+import fs from 'fs';
 import parseDoc from './doc-parser';
 import dataDescription from './data-description';
 import { PathNotFoundError, ExtensionError } from './errors';
@@ -8,6 +9,7 @@ let outputPath = '';
 
 program
   .name('json-yaml-ref-resolver')
+  .version(JSON.parse(fs.readFileSync('package.json', 'utf-8')).version)
   .arguments('<targetFilePath> <outputFilePath>')
   .action((targetFilePath: string, outputFilePath: string) => {
     inputPath = targetFilePath;

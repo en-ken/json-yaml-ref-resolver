@@ -57,7 +57,8 @@ describe('App test:', () => {
       const match = [
         /Usage: json-yaml-ref-resolver \[options\] <targetFilePath> <outputFilePath>/,
         /-i, --indent <size>/,
-        /-h, --help/
+        /-h, --help/,
+        /-V, --version/
       ];
       match.forEach(x => expect(result.stdout).toMatch(x));
     });
@@ -66,7 +67,8 @@ describe('App test:', () => {
       const match = [
         /Usage: json-yaml-ref-resolver \[options\] <targetFilePath> <outputFilePath>/,
         /-i, --indent <size>/,
-        /-h, --help/
+        /-h, --help/,
+        /-V, --version/
       ];
       match.forEach(x => expect(result.stdout).toMatch(x));
     });
