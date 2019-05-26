@@ -38,22 +38,27 @@ jobs:
       - run:
           name: Test
           command: npm test
+  push_tag:
+    executor: default
+    steps:
+      - checkout
+      - restore_modules
+      - run:
+          name: Push a new tag
+          command: |
+            git config push.default current
+            git config --global user.name  "EnKen"
+            git config --global user.email "${github_email}"
+            npm version patch -m "v%s tagged [ci skip]"
+            git push --tags origin master
   publish:
     executor: default
     steps:
       - checkout
       - restore_modules
       - run:
-          name: github setting
+          name: Publish to npm
           command: |
-            git config push.default current
-            git config --global user.name  "EnKen"
-            git config --global user.email "${github_email}"
-      - run:
-          name: tag and publish to npm
-          command: |
-            npm version patch
-            git push --tags origin master
             echo "//registry.npmjs.org/:_authToken=${npm_token}" > ~/project/.npmrc
             npm publish
 
@@ -64,9 +69,23 @@ workflows:
       - test:
           requires:
             - setup
-      - publish:
+      - push_tag:
           requires:
             - test
-          #filters:
-          #  branches:
-          #    only: master
+          filters:
+            branches:
+              only: master
+  publish:
+    jobs:
+      - setup:
+          filters:
+            tags:
+              only: /^v.*/
+      - publish:
+          requires:
+            - setup
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/
