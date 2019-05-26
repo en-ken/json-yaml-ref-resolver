@@ -26,11 +26,11 @@ try {
   doc = parseDoc(inputPath);
 } catch (err) {
   if (err instanceof PathNotFoundError) {
-    console.error('<targetFilePath> does not exist');
+    process.stderr.write('<targetFilePath> does not exist');
   } else if (err instanceof ExtensionError) {
-    console.error('Extension must be json/yaml/yml');
+    process.stderr.write('Extension must be json/yaml/yml');
   } else {
-    console.error(err);
+    process.stderr.write(err);
   }
   process.exit(-1);
 }
@@ -44,11 +44,11 @@ try {
   }
 } catch (err) {
   if (err instanceof PathNotFoundError) {
-    console.error('<outputFilePath> does not exist');
+    process.stderr.write('<outputFilePath> does not exist');
   } else if (err instanceof ExtensionError) {
-    console.error('Extension must be json/yaml/yml');
+    process.stderr.write('Extension must be json/yaml/yml');
   } else {
-    console.error(err);
+    process.stderr.write(err);
   }
   process.exit(-1);
 }
