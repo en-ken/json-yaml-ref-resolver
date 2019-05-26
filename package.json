@@ -14,7 +14,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/en-ken/openapi-merger.git"
+    "url": "git+https://github.com/en-ken/json-yaml-ref-resolver.git"
   },
   "keywords": [
     "OpenAPI",
@@ -26,9 +26,9 @@
   "author": "en-ken",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/en-ken/openapi-merger/issues"
+    "url": "https://github.com/en-ken/json-yaml-ref-resolver/issues"
   },
-  "homepage": "https://github.com/en-ken/openapi-merger#readme",
+  "homepage": "https://github.com/en-ken/json-yaml-ref-resolver#readme",
   "dependencies": {
     "commander": "^2.20.0",
     "js-yaml": "^3.13.1"
