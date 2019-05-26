@@ -43,13 +43,13 @@ describe('CLI displays', () => {
     ];
     match.forEach(x => expect(result.stdout).toMatch(x));
   });
-  test('success message', () => {
+  test('the success message', () => {
     const result = cli([
       'test-data/petstore.template.yml',
       `${saveDir}/result.yml`
     ]);
+    expect(result.stderr).toEqual('');
     expect(result.stdout).toMatch(/Done./);
-    expect(result.stderr).toMatch('');
   });
   test('the error message when <targetFilePath> does not exist', () => {
     const result = cli(['foo.yml', 'bar.yml']);
