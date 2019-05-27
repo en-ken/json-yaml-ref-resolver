@@ -5,7 +5,6 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 
-
 Simple `$ref` keyword resolver on json and yaml files.
 
 ## Motivation
@@ -28,8 +27,7 @@ npm i -g json-yaml-ref-resolver
 Please just specify a entry point file as `<targetFilePath>` and a merged file as `<outputFilepath>`.
 
 ```:bash
-json-yaml-ref-resolver [options] <targetFilePath> <output
-FilePath>
+ref-resolver [options] <targetFilePath> <outputFilePath>
 
 Options:
   -i, --indent <size>  change indent size (default: 2)

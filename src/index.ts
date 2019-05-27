@@ -8,7 +8,7 @@ let inputPath = '';
 let outputPath = '';
 
 program
-  .name('json-yaml-ref-resolver')
+  .name('ref-resolver')
   .version(JSON.parse(fs.readFileSync('package.json', 'utf-8')).version)
   .arguments('<targetFilePath> <outputFilePath>')
   .action((targetFilePath: string, outputFilePath: string) => {

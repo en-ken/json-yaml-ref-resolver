@@ -55,7 +55,7 @@ describe('App test:', () => {
       const result = cli(['-h']);
 
       const match = [
-        /Usage: json-yaml-ref-resolver \[options\] <targetFilePath> <outputFilePath>/,
+        /Usage: ref-resolver \[options\] <targetFilePath> <outputFilePath>/,
         /-i, --indent <size>/,
         /-h, --help/,
         /-V, --version/
@@ -65,7 +65,7 @@ describe('App test:', () => {
     test('usage when required input is not enough', () => {
       const result = cli();
       const match = [
-        /Usage: json-yaml-ref-resolver \[options\] <targetFilePath> <outputFilePath>/,
+        /Usage: ref-resolver \[options\] <targetFilePath> <outputFilePath>/,
         /-i, --indent <size>/,
         /-h, --help/,
         /-V, --version/
