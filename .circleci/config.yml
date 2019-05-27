@@ -48,7 +48,6 @@ jobs:
       - run:
           name: Push a new tag
           command: |
-            git config push.default current
             git config --global user.name  "EnKen"
             git config --global user.email "${github_email}"
             npm version patch -m "v%s tagged [ci skip]"
