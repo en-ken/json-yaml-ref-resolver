@@ -1,8 +1,9 @@
 # json-yaml-ref-resolver
 
-[![CircleCI](https://circleci.com/gh/en-ken/json-yaml-ref-resolver.svg?style=svg)](https://circleci.com/gh/en-ken/json-yaml-ref-resolver)
-
+![](https://circleci.com/gh/YoshinoriN/docker-redmine-orchestration/tree/master.svg?style=shield&circle-token=854e5168d43adaee224c31496c9bab4ac865dbc)
+[![npm version](https://badge.fury.io/js/json-yaml-ref-resolver.svg)](https://badge.fury.io/js/json-yaml-ref-resolver)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 
 
 Simple `$ref` keyword resolver on json and yaml files.
