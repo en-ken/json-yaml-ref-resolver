@@ -63,7 +63,7 @@ jobs:
             npm publish
 
 workflows:
-  main:
+  triggerred_by_push:
     jobs:
       - setup
       - test:
@@ -75,7 +75,7 @@ workflows:
           filters:
             branches:
               only: master
-  publish:
+  triggerred_by_tagging:
     jobs:
       - setup
       - publish:
