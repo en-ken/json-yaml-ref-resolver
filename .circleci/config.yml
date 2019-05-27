@@ -38,6 +38,8 @@ jobs:
       - run:
           name: Test
           command: npm test
+      - store_artifacts:
+          path: coverage
   push_tag:
     executor: default
     steps:
@@ -81,6 +83,8 @@ workflows:
           filters:
             tags:
               only: /^v.*/
+            branches:
+              ignore: /.*/
       - publish:
           requires:
             - setup
