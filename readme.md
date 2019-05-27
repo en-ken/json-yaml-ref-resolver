@@ -1,7 +1,7 @@
 # json-yaml-ref-resolver
 
-[![CircleCI](https://circleci.com/gh/en-ken/json-yaml-ref-resolver.svg?style=svg)](https://circleci.com/gh/en-ken/json-yaml-ref-resolver)
-
+![](https://circleci.com/gh/YoshinoriN/docker-redmine-orchestration/tree/master.svg?style=shield&circle-token=854e5168d43adaee224c31496c9bab4ac865dbc)
+[![npm version](https://badge.fury.io/js/json-yaml-ref-resolver.svg)](https://badge.fury.io/js/json-yaml-ref-resolver)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 
@@ -27,8 +27,7 @@ npm i -g json-yaml-ref-resolver
 Please just specify a entry point file as `<targetFilePath>` and a merged file as `<outputFilepath>`.
 
 ```:bash
-json-yaml-ref-resolver [options] <targetFilePath> <output
-FilePath>
+ref-resolver [options] <targetFilePath> <outputFilePath>
 
 Options:
   -i, --indent <size>  change indent size (default: 2)

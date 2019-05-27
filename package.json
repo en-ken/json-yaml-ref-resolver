@@ -7,6 +7,9 @@
   "files": [
     "lib"
   ],
+  "bin": {
+    "ref-resolver": "lib/index.js"
+  },
   "scripts": {
     "test": "jest",
     "build": "rimraf ./lib; tsc",
