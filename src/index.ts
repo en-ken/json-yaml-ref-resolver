@@ -9,7 +9,9 @@ let outputPath = '';
 
 program
   .name('ref-resolver')
-  .version(JSON.parse(fs.readFileSync('package.json', 'utf-8')).version)
+  .version(
+    JSON.parse(fs.readFileSync(__dirname + '/../package.json', 'utf-8')).version
+  )
   .arguments('<targetFilePath> <outputFilePath>')
   .action((targetFilePath: string, outputFilePath: string) => {
     inputPath = targetFilePath;
