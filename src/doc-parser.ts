@@ -3,53 +3,36 @@ import DataDescription from './data-description';
 
 const parseDoc = (filePath: string) => {
   const dsc = DataDescription.load(filePath);
-  return parseRecursively(dsc);
+  return parse(dsc);
 };
 export default parseDoc;
 
-const parseRecursively = (
-  description: DataDescription,
-  targetRef: string = '#'
-): any => {
+const parse = (description: DataDescription, targetRef: string = '#'): any => {
   const part = description.getObject(targetRef);
   if (Array.isArray(part)) {
     part.forEach((item, i) => {
       if (typeof item === 'object') {
-        part[i] = parseObject(description, item, targetRef, `${i}`);
+        part[i] = parse(description, joinRefPath(targetRef, `${i}`));
       }
     });
   } else if (typeof part === 'object') {
     const keys = Object.keys(part);
     if (keys.length === 1 && keys[0] === '$ref') {
-      return parseObject(description, part, targetRef, keys[0]);
+      const { dsc, ref } = loadNewDocumentIfNeeded(description, part['$ref']);
+      return parse(dsc, ref);
+    } else {
+      keys.forEach(key => {
+        if (typeof part[key] === 'object') {
+          part[key] = parse(description, joinRefPath(targetRef, key));
+        }
+      });
     }
-    keys.forEach(key => {
-      const child = part[key];
-      if (typeof child === 'object') {
-        part[key] = parseObject(description, child, targetRef, key);
-      }
-    });
   }
   return part;
 };
 
-const parseObject = (
-  description: DataDescription,
-  obj: any,
-  targetRef: string,
-  key: string
-) => {
-  const keys = Object.keys(obj);
-  if (keys.length === 1 && keys[0] === '$ref') {
-    const { dsc, ref } = loadNewDocumentIfNeeded(description, obj['$ref']);
-    return parseRecursively(dsc, ref);
-  } else {
-    const nextRef = `${targetRef}/${key
-      .replace(/~/g, '~0')
-      .replace(/\//g, '~1')}`;
-    return parseRecursively(description, nextRef);
-  }
-};
+const joinRefPath = (targetRef: string, key: string) =>
+  `${targetRef}/${key.replace(/~/g, '~0').replace(/\//g, '~1')}`;
 
 const loadNewDocumentIfNeeded = (dsc: DataDescription, ref: string) => {
   // './remote-ref.yml#/local/ref'
