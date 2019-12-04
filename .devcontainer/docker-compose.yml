@@ -1,0 +1,13 @@
+version: "3"
+services:
+  node-typescript:
+    user: node
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    volumes:
+      - ../:/home/node/workspace
+      - ~/.vimrc:/home/node/.vimrc
+      - ~/.config:/home/node/.config
+      - ~/.ssh:/home/node/.ssh
+    tty: true
