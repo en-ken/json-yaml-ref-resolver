@@ -10,7 +10,7 @@ export default parseDoc;
 const parseRecursively = (
   description: DataDescription,
   targetRef: string = '#'
-) => {
+): any => {
   const part = description.getObject(targetRef);
   if (Array.isArray(part)) {
     part.forEach((item, i) => {
@@ -19,7 +19,11 @@ const parseRecursively = (
       }
     });
   } else if (typeof part === 'object') {
-    Object.keys(part).forEach(key => {
+    const keys = Object.keys(part);
+    if (keys.length === 1 && keys[0] === '$ref') {
+      return parseObject(description, part, targetRef, keys[0]);
+    }
+    keys.forEach(key => {
       const child = part[key];
       if (typeof child === 'object') {
         part[key] = parseObject(description, child, targetRef, key);

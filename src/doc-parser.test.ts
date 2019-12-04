@@ -133,6 +133,30 @@ describe('parseDoc', () => {
         const actual = parseDoc('foo.yaml');
         expect(actual).toEqual(expected);
       });
+      test('nested references', () => {
+        DataDescription.load = jest.fn(
+          () =>
+            new DataDescription({
+              content: {
+                a: { $ref: '#/content/ref1' },
+                ref1: { $ref: '#/content/ref2' },
+                ref2: { $ref: '#/content/ref3' },
+                ref3: 'a'
+              }
+            })
+        );
+        const expected = {
+          content: {
+            a: 'a',
+            ref1: 'a',
+            ref2: 'a',
+            ref3: 'a'
+          }
+        };
+
+        const actual = parseDoc('foo.yaml');
+        expect(actual).toEqual(expected);
+      });
     });
   });
 });
