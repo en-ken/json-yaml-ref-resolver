@@ -12,7 +12,7 @@ function cli(args: any[] = []) {
 }
 
 async function sleep(msec: number) {
-  return new Promise(resolve => setTimeout(resolve, msec));
+  return new Promise((resolve) => setTimeout(resolve, msec));
 }
 
 function pathExists(path: string) {
@@ -60,17 +60,12 @@ describe('App test:', () => {
         /-h, --help/,
         /-V, --version/
       ];
-      match.forEach(x => expect(result.stdout).toMatch(x));
+      match.forEach((x) => expect(result.stdout).toMatch(x));
     });
     test('usage when required input is not enough', () => {
       const result = cli();
-      const match = [
-        /Usage: ref-resolver \[options\] <targetFilePath> <outputFilePath>/,
-        /-i, --indent <size>/,
-        /-h, --help/,
-        /-V, --version/
-      ];
-      match.forEach(x => expect(result.stdout).toMatch(x));
+      const match = [/missing required argument 'targetFilePath'/];
+      match.forEach((x) => expect(result.stderr).toMatch(x));
     });
     test('the success message', () => {
       const result = cli([

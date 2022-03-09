@@ -7,7 +7,7 @@ const parseDoc = (filePath: string) => {
 };
 export default parseDoc;
 
-const parse = (description: DataDescription, targetRef: string = '#'): any => {
+const parse = (description: DataDescription, targetRef = '#'): any => {
   const part = description.getObject(targetRef);
   if (Array.isArray(part)) {
     part.forEach((item, i) => {
@@ -21,7 +21,7 @@ const parse = (description: DataDescription, targetRef: string = '#'): any => {
       const { dsc, ref } = loadNewDocumentIfNeeded(description, part['$ref']);
       return parse(dsc, ref);
     } else {
-      keys.forEach(key => {
+      keys.forEach((key) => {
         if (typeof part[key] === 'object') {
           part[key] = parse(description, joinRefPath(targetRef, key));
         }

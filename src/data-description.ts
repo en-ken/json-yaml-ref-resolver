@@ -4,7 +4,7 @@ import { ExtensionError, UsageError, PathNotFoundError } from './errors';
 
 export default class DataDescription {
   doc: any;
-  baseFilePath: string = '/';
+  baseFilePath = '/';
 
   constructor(doc?: any) {
     this.doc = doc;
@@ -18,7 +18,7 @@ export default class DataDescription {
     switch (ext) {
       case 'yaml':
       case 'yml':
-        func = yaml.safeLoad;
+        func = yaml.load;
         break;
       case 'json':
         func = JSON.parse;
@@ -46,7 +46,7 @@ export default class DataDescription {
     switch (ext) {
       case 'yaml':
       case 'yml':
-        docStr = yaml.safeDump(this.doc, { indent, noRefs: true });
+        docStr = yaml.dump(this.doc, { indent, noRefs: true });
         break;
       case 'json':
         docStr = JSON.stringify(this.doc, null, ' '.repeat(indent));
@@ -62,7 +62,7 @@ export default class DataDescription {
     }
   }
 
-  setObject(ref: string, obj: {}) {
+  setObject(ref: string, obj: Record<string, unknown> | string) {
     const [remoteRef, localRef] = ref.split('#');
     if (remoteRef) {
       throw new UsageError('Remote reference unavailable');
@@ -72,7 +72,7 @@ export default class DataDescription {
     const lastKey = pathKeys.pop()!;
 
     let tmp = this.doc;
-    pathKeys.forEach(x => {
+    pathKeys.forEach((x) => {
       if (!tmp[x]) {
         tmp[x] = {};
       }
@@ -91,7 +91,7 @@ export default class DataDescription {
     const pathKeys = parseLocalPath(localRef);
 
     let tmp = this.doc;
-    pathKeys.forEach(x => {
+    pathKeys.forEach((x) => {
       if (!tmp[x]) {
         tmp[x] = {};
       }
@@ -105,5 +105,5 @@ export default class DataDescription {
 const parseLocalPath = (ref: string) =>
   ref
     .split('/')
-    .filter(x => x !== '')
-    .map(x => x.replace(/~1/g, '/').replace(/~0/g, '~'));
+    .filter((x) => x !== '')
+    .map((x) => x.replace(/~1/g, '/').replace(/~0/g, '~'));
