@@ -62,7 +62,7 @@ export default class DataDescription {
     }
   }
 
-  setObject(ref: string, obj: Record<string, unknown>) {
+  setObject(ref: string, obj: Record<string, unknown> | string) {
     const [remoteRef, localRef] = ref.split('#');
     if (remoteRef) {
       throw new UsageError('Remote reference unavailable');
