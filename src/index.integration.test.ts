@@ -65,12 +65,9 @@ describe('App test:', () => {
     test('usage when required input is not enough', () => {
       const result = cli();
       const match = [
-        /Usage: ref-resolver \[options\] <targetFilePath> <outputFilePath>/,
-        /-i, --indent <size>/,
-        /-h, --help/,
-        /-V, --version/
+        /missing required argument 'targetFilePath'/
       ];
-      match.forEach(x => expect(result.stdout).toMatch(x));
+      match.forEach(x => expect(result.stderr).toMatch(x));
     });
     test('the success message', () => {
       const result = cli([
