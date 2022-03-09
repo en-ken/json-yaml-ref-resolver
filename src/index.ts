@@ -26,7 +26,7 @@ if (!inputPath || !outputPath) {
   process.exit(1);
 }
 
-let doc;
+let doc = {};
 // read the target file and parse $ref
 try {
   doc = parseDoc(inputPath);
@@ -36,14 +36,16 @@ try {
   } else if (err instanceof ExtensionError) {
     process.stderr.write('Extension must be json/yaml/yml');
   } else {
-    const e = err as Error
-    process.stderr.write(`${e.name} message:${e.message} stacktrace:${e.stack}`);
+    const e = err as Error;
+    process.stderr.write(
+      `${e.name} message:${e.message} stacktrace:${e.stack}`
+    );
   }
   process.exit(-1);
 }
 
 // save
-const opts = program.opts()
+const opts = program.opts();
 try {
   if (opts.indent) {
     new dataDescription(doc).saveAs(outputPath, opts.indent);
@@ -56,8 +58,10 @@ try {
   } else if (err instanceof ExtensionError) {
     process.stderr.write('Extension must be json/yaml/yml');
   } else {
-    const e = err as Error
-    process.stderr.write(`${e.name} message:${e.message} stacktrace:${e.stack}`);
+    const e = err as Error;
+    process.stderr.write(
+      `${e.name} message:${e.message} stacktrace:${e.stack}`
+    );
   }
   process.exit(-1);
 }

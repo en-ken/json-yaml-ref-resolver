@@ -6,8 +6,9 @@ describe('parseDoc', () => {
     const loadDir = 'test-data';
     test('is successful', () => {
       const actual = parseDoc(`${loadDir}/petstore.template.yml`);
-      const expected = DataDescription.load(`${loadDir}/petstore.expanded.yml`)
-        .doc;
+      const expected = DataDescription.load(
+        `${loadDir}/petstore.expanded.yml`
+      ).doc;
       expect(actual).toEqual(expected);
     });
   });
